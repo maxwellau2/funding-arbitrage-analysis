@@ -223,7 +223,7 @@ To understand the methodology and reasoning, follow this order:
 ---
 
 ## **Results & Visualization**
-- To see **performance results** without running the script, open **`output.html`**.
+- To see **performance results** without running the script, open <a href="https://maxwellau2.github.io/funding-arbitrage-analysis/output.html">backtest results here</a>.
 - It contains **interactive charts and backtest analysis**.
 
 ---

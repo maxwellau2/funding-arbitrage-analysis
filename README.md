@@ -83,6 +83,80 @@ def heuristic(column: pd.Series, small_window: int = 5, big_window: int = 20, pe
 
 ---
 
+### **Pseudocode for Ticker Selection in the Funding Arbitrage Strategy**  
+
+The strategy selects **tickers (assets)** based on their funding rate characteristics, ensuring the highest-yielding assets are chosen while maintaining stability.
+
+---
+
+### **1️⃣ Retrieve Funding Rate Data**
+- Extract the latest funding rate values for all available tickers.
+- Apply the **heuristic function** to generate scores for each ticker.
+
+---
+
+### **2️⃣ Sort and Select the Top Tickers**
+1. **Sort tickers** in descending order based on their heuristic scores.
+2. Select the **top (max_assets + 10) tickers**:
+   ```
+   top_tickers = select_top_k(heuristic_scores, k = max_assets + 10)
+   ```
+   - **Why extra 10 tickers?**  
+     - Provides flexibility in rebalancing.  
+     - Reduces unnecessary turnover in positions.
+
+---
+
+### **3️⃣ Rebalancing Logic**
+1. **Determine the current holdings**:
+   ```
+   current_positions = get_current_positions()
+   ```
+
+2. **Identify tickers to remove**:
+   - If a currently held ticker is **not in the top (max_assets + 10)**, mark it for removal:
+    ```
+    to_remove = current_positions - top_tickers
+    ```
+
+3. **Identify tickers to add**:
+   - If a top-ranked ticker is **not currently held**, mark it for addition:
+    ```
+    to_add = top_tickers[:max_assets] - current_positions
+    ```
+
+4. **Limit the number of changes**:
+   ```
+   rebalance_count = min(2, len(to_remove))
+   ```
+   - Only replace at most **2 tickers per rebalance** to **reduce unnecessary churn**.
+
+---
+
+### **4️⃣ Execute Trades**
+- **Close positions** for tickers in `to_remove`:
+  ```
+  for ticker in to_remove[:rebalance_count]:
+      close_position(ticker)
+  ```
+- **Open positions** for tickers in `to_add`:
+  ```
+  for ticker in to_add[:rebalance_count]:
+      open_position(ticker)
+  ```
+
+---
+
+### **5️⃣ Summary**
+✅ **Prioritizes high-yield tickers** based on funding rates.  
+✅ **Uses extra 10 tickers as a buffer** to improve stability.  
+✅ **Limits rebalancing to 2 assets at a time** to reduce excessive turnover.  
+✅ **Dynamically adapts** as market conditions change.  
+
+---
+
+
+
 ## **Setup Instructions**
 
 ### **Requirements**

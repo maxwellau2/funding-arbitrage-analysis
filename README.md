@@ -22,33 +22,33 @@ This project implements a **funding arbitrage trading strategy** that systematic
 ## **Heuristic Formula**
 The heuristic used to determine asset selection is:
 $$
-\textbf{Heuristic Function:}
+\mathbf{Heuristic\ Function:}
 $$
 
 $$
-\text{heuristic}(\text{column}, \text{window} = 5, \text{penalty} = 0.4)
+\mathrm{heuristic}(\mathrm{column},\ \mathrm{window} = 5,\ \mathrm{penalty} = 0.4)
 $$
 
 $$
-\text{heu} = \frac{|\mathbb{E}_w[\text{column}]|}{\sigma_w(\text{column})}
+\mathrm{heu} = \frac{|\mathbb{E}_w[\mathrm{column}]|}{\sigma_w(\mathrm{column})}
 $$
 
 **where:**
 
 $$
-\mathbb{E}_w[\text{column}] = \text{column.rolling(window).mean()}
+\mathbb{E}_w[\mathrm{column}] = \mathrm{column.rolling(window).mean()}
 $$
 
 is the **moving average** (expected return).
 
 $$
-\sigma_w(\text{column}) = \text{column.rolling(window).std()}
+\sigma_w(\mathrm{column}) = \mathrm{column.rolling(window).std()}
 $$
 
 is the **rolling standard deviation** (volatility).
 
 $$
-\text{heu}
+\mathrm{heu}
 $$
 
 is the computed heuristic value.
@@ -58,11 +58,11 @@ is the computed heuristic value.
 To **apply a penalty for sign changes**, we define:
 
 $$
-\text{sign\_change} = (\text{sign}(\text{column}) \neq \text{sign}(\text{column}.shift(1)))
+\mathrm{sign\_change} = (\mathrm{sign}(\mathrm{column}) \neq \mathrm{sign}(\mathrm{column}.shift(1)))
 $$
 
 $$
-\text{heu}[\text{sign\_change}] *= \text{penalty}
+\mathrm{heu}[\mathrm{sign\_change}] *= \mathrm{penalty}
 $$
 
 
